@@ -65,12 +65,12 @@ Formato de saída obrigatório:
 ```
 
 **Resultado:**
-> Disponível em [ex-1_1-analise-rag-novatech.md](../docs/ex-1_1-analise-rag-novatech.md)
+> Disponível em [ex-1_1-analise-rag-novatech.md](../.spec/ex-1_1-analise-viabilidade-tecnica/ex-1_1-analise-rag-novatech.md)
 
 ## Iteração 2
 
 **Contexto adicionado a sessão:**
-> Disponível em [ex-1_1-analise-rag-novatech.md](../docs/ex-1_1-analise-rag-novatech.md)
+> Disponível em [ex-1_1-analise-rag-novatech.md](../.spec/ex-1_1-analise-viabilidade-tecnica/ex-1_1-analise-rag-novatech.md)
 
 **Prompt utilizado:**
 ```
@@ -78,12 +78,12 @@ Revise a análise: identifique pontos fracos, estimativas otimistas demais ou ri
 ```
 
 **Resultado:**
-> Disponível em [ex-1_1-revisao-critica-rag-novatech.md](../docs/ex-1_1-revisao-critica-rag-novatech.md)
+> Disponível em [ex-1_1-revisao-critica-rag-novatech.md](../.spec/ex-1_1-analise-viabilidade-tecnica/ex-1_1-revisao-critica-rag-novatech.md)
 
 ## Iteração 3
 
 **Contexto adicionado a sessão:**
-> Disponível em [ex-1_1-analise-rag-novatech.md](../docs/ex-1_1-analise-rag-novatech.md) e [ex-1_1-revisao-critica-rag-novatech.md](../docs/ex-1_1-revisao-critica-rag-novatech.md)
+> Disponível em [ex-1_1-analise-rag-novatech.md](../.spec/ex-1_1-analise-viabilidade-tecnica/ex-1_1-analise-rag-novatech.md) e [ex-1_1-revisao-critica-rag-novatech.md](../.spec/ex-1_1-analise-viabilidade-tecnica/ex-1_1-revisao-critica-rag-novatech.md)
 
 **Prompt utilizado:**
 ```
@@ -91,7 +91,7 @@ Contemple a análise inicial e a revisão crítica em um novo documento como sen
 ```
 
 **Resultado:**
-> Disponível em [ex-1_1-analise-final-rag-novatech.md](../docs/ex-1_1-analise-final-rag-novatech.md)
+> Disponível em [ex-1_1-analise-final-rag-novatech.md](../.spec/ex-1_1-analise-viabilidade-tecnica/ex-1_1-analise-final-rag-novatech.md)
 
 > A estrutura integra as duas análises da seguinte forma:
 >	- Seção 1 — mantém a Tabela A original, mas corrige a recomendação do openpyxl (substituído por xlwings/M365 API) e adiciona duas subseções com as estratégias faltantes: política concreta para links Confluence não resolvidos e pipeline de detecção de fluxogramas em imagens

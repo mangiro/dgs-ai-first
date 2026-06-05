@@ -22,12 +22,12 @@ Estruture o System Prompt gerado em seções claras (preferencialmente utilizand
 ```
 
 **Resultado:**
-> Disponível em [ex-1_2-system-prompt-v1.md](../docs/ex-1_2-system-prompt-v1.md)
+> Disponível em [ex-1_2-system-prompt-v1.md](../.spec/ex-1_2-engenharia-de-contexto/ex-1_2-system-prompt-v1.md)
 
 ## Análise da Estrutura de Contexto do System Prompt V1
 
 **Contexto adicionado a sessão:**
-> Disponível em [ex-1_2-system-prompt-v1.md](../docs/ex-1_2-system-prompt-v1.md) e [ex-1_1-analise-final-rag-novatech.md](../docs/ex-1_1-analise-final-rag-novatech.md)
+> Disponível em [ex-1_2-system-prompt-v1.md](../.spec/ex-1_2-engenharia-de-contexto/ex-1_2-system-prompt-v1.md) e [ex-1_1-analise-final-rag-novatech.md](../.spec/ex-1_2-engenharia-de-contexto/ex-1_1-analise-final-rag-novatech.md)
 
 **Prompt utilizado:**
 ```
@@ -48,20 +48,20 @@ Sua tarefa é documentar e dissecar a estrutura de contexto de um System Prompt 
 ```
 
 **Resultado:**
-> Disponível em [ex-1_2-analise-system-prompt-v1.md](../docs/ex-1_2-analise-system-prompt-v1.md)
+> Disponível em [ex-1_2-analise-system-prompt-v1.md](../.spec/ex-1_2-engenharia-de-contexto/ex-1_2-analise-system-prompt-v1.md)
 
 ## Teste System Prompt V1
 
 **Contexto adicionado a sessão:**
-> Disponível em [ex-1_2-system-prompt-v1.md](../docs/ex-1_2-system-prompt-v1.md) e [ex-1_2-chunks-simulados.md](../docs/ex-1_2-chunks-simulados.md)
+> Disponível em [ex-1_2-system-prompt-v1.md](../.spec/ex-1_2-engenharia-de-contexto/ex-1_2-system-prompt-v1.md) e [ex-1_2-chunks-simulados.md](../.spec/ex-1_2-engenharia-de-contexto/ex-1_2-chunks-simulados.md)
 
 **Resultado:**
-> Disponível em [ex-1_2-teste-system-prompt-v1.md](../docs/ex-1_2-teste-system-prompt-v1.md)
+> Disponível em [ex-1_2-teste-system-prompt-v1.md](../.spec/ex-1_2-engenharia-de-contexto/ex-1_2-teste-system-prompt-v1.md)
 
 ## Análise crítica do resultado do teste do System Prompt V1
 
 **Contexto adicionado a sessão:**
-> Disponível em [ex-1_2-system-prompt-v1.md](../docs/ex-1_2-system-prompt-v1.md) e [ex-1_2-teste-system-prompt-v1.md](../docs/ex-1_2-teste-system-prompt-v1.md)
+> Disponível em [ex-1_2-system-prompt-v1.md](../.spec/ex-1_2-engenharia-de-contexto/ex-1_2-system-prompt-v1.md) e [ex-1_2-teste-system-prompt-v1.md](../.spec/ex-1_2-engenharia-de-contexto/ex-1_2-teste-system-prompt-v1.md)
 
 **Prompt utilizado:**
 ```
@@ -82,12 +82,12 @@ Formato de Saída Exigido (Para cada Pergunta/Resposta):
 ```
 
 **Resultado:**
-> Disponível em [ex-1_2-qa-system-prompt-v1.md](../docs/ex-1_2-qa-system-prompt-v1.md)
+> Disponível em [ex-1_2-qa-system-prompt-v1.md](../.spec/ex-1_2-engenharia-de-contexto/ex-1_2-qa-system-prompt-v1.md)
 
 ## Criação do System Prompt V2
 
 **Contexto adicionado a sessão:**
-> Disponível em [ex-1_2-system-prompt-v1.md](../docs/ex-1_2-system-prompt-v1.md), [ex-1_2-teste-system-prompt-v1.md](../docs/ex-1_2-teste-system-prompt-v1.md) e [ex-1_2-qa-system-prompt-v1.md](../docs/ex-1_2-qa-system-prompt-v1.md)
+> Disponível em [ex-1_2-system-prompt-v1.md](../.spec/ex-1_2-engenharia-de-contexto/ex-1_2-system-prompt-v1.md), [ex-1_2-teste-system-prompt-v1.md](../.spec/ex-1_2-engenharia-de-contexto/ex-1_2-teste-system-prompt-v1.md) e [ex-1_2-qa-system-prompt-v1.md](../.spec/ex-1_2-engenharia-de-contexto/ex-1_2-qa-system-prompt-v1.md)
 
 **Prompt utilizado:**
 ```
@@ -103,20 +103,20 @@ Regras para geração:
 ```
 
 **Resultado:**
-> Disponível em [ex-1_2-system-prompt-v2.md](../docs/ex-1_2-system-prompt-v2.md)
+> Disponível em [ex-1_2-system-prompt-v2.md](../.spec/ex-1_2-engenharia-de-contexto/ex-1_2-system-prompt-v2.md)
 
 ## Teste System Prompt V2
 
 **Contexto adicionado a sessão:**
-> Disponível em [ex-1_2-system-prompt-v2.md](../docs/ex-1_2-system-prompt-v2.md) e [ex-1_2-chunks-simulados.md](../docs/ex-1_2-chunks-simulados.md)
+> Disponível em [ex-1_2-system-prompt-v2.md](../.spec/ex-1_2-engenharia-de-contexto/ex-1_2-system-prompt-v2.md) e [ex-1_2-chunks-simulados.md](../.spec/ex-1_2-engenharia-de-contexto/ex-1_2-chunks-simulados.md)
 
 **Resultado:**
-> Disponível em [ex-1_2-teste-system-prompt-v2.md](../docs/ex-1_2-teste-system-prompt-v2.md)
+> Disponível em [ex-1_2-teste-system-prompt-v2.md](../.spec/ex-1_2-engenharia-de-contexto/ex-1_2-teste-system-prompt-v2.md)
 
 ## Análise Comparativa — System Prompt V1 × V2
 
 **Contexto adicionado a sessão:**
-> Disponível em [ex-1_2-system-prompt-v1.md](../docs/ex-1_2-system-prompt-v1.md), [ex-1_2-system-prompt-v2.md](../docs/ex-1_2-system-prompt-v2.md), [ex-1_2-teste-system-prompt-v1.md](../docs/ex-1_2-teste-system-prompt-v1.md), [ex-1_2-qa-system-prompt-v1.md](../docs/ex-1_2-qa-system-prompt-v1.md) e [ex-1_2-teste-system-prompt-v2.md](../docs/ex-1_2-teste-system-prompt-v2.md)
+> Disponível em [ex-1_2-system-prompt-v1.md](../.spec/ex-1_2-engenharia-de-contexto/ex-1_2-system-prompt-v1.md), [ex-1_2-system-prompt-v2.md](../.spec/ex-1_2-engenharia-de-contexto/ex-1_2-system-prompt-v2.md), [ex-1_2-teste-system-prompt-v1.md](../.spec/ex-1_2-engenharia-de-contexto/ex-1_2-teste-system-prompt-v1.md), [ex-1_2-qa-system-prompt-v1.md](../.spec/ex-1_2-engenharia-de-contexto/ex-1_2-qa-system-prompt-v1.md) e [ex-1_2-teste-system-prompt-v2.md](../.spec/ex-1_2-engenharia-de-contexto/ex-1_2-teste-system-prompt-v2.md)
 
 **Prompt utilizado:**
 ```
@@ -139,4 +139,4 @@ Formato esperado: Tabela comparativa por pergunta + parecer final indicando se o
 ```
 
 **Resultado:**
-> Disponível em [ex-1_2-analise-comparativa-v1-v2.md](../docs/ex-1_2-analise-comparativa-v1-v2.md)
+> Disponível em [ex-1_2-analise-comparativa-v1-v2.md](../.spec/ex-1_2-engenharia-de-contexto/ex-1_2-analise-comparativa-v1-v2.md)
