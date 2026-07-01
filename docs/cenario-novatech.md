@@ -28,3 +28,7 @@ Antes de escrever a primeira linha de código de produção, o time precisa:
 #### Conceito de MCP
 
 > MCP (Model Context Protocol) padroniza como modelos de IA se conectam a ferramentas externas. Um MCP server expõe Tools (ações), Resources (dados read-only) e Prompts (templates). Servers podem rodar localmente — não precisam ser serviços na nuvem.
+
+#### Conceito de skills
+
+> Skills são artefatos estruturados (tipicamente arquivos .md) que encapsulam como gerar tipos específicos de outputs. A hierarquia é Foundation (convenções globais) → Domain (padrões por camada) → Artifact (receitas de geração).
