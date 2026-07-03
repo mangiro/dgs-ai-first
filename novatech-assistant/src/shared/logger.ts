@@ -4,9 +4,27 @@
 
 import pino, { type Logger } from "pino";
 
-/** Instância pino pré-configurada; nível controlado via `LOG_LEVEL`. */
+/**
+ * Instância pino pré-configurada; nível controlado via `LOG_LEVEL`.
+ *
+ * `redact` é a barreira central (defesa em profundidade) contra vazamento de
+ * segredos (chaves Azure) e PII (`question` do atendente/cliente). Cobre tanto
+ * o objeto `config` quanto headers de request do SDK Azure (`api-key`,
+ * `authorization`). Nunca serialize o `config` inteiro em logs mesmo assim.
+ */
 export const logger: Logger = pino({
   level: process.env.LOG_LEVEL ?? "info",
+  redact: {
+    paths: [
+      "config.azureOpenAI.key",
+      "config.azureSearch.key",
+      "*.key",
+      'req.headers["api-key"]',
+      "req.headers.authorization",
+      "question", // PII do atendente/cliente
+    ],
+    censor: "[REDACTED]",
+  },
 });
 
 /**

@@ -9,12 +9,17 @@
     "build": "tsc -p ."
   },
   "dependencies": {
-    "pino": "^9.0.0"
+    "@azure/functions": "^4.5.0",
+    "@azure/openai": "^2.0.0",
+    "@azure/search-documents": "^12.1.0",
+    "pino": "^9.0.0",
+    "zod": "^3.23.0"
   },
   "devDependencies": {
     "@types/node": "^20.14.0",
+    "eslint": "^9.0.0",
     "typescript": "^5.5.0",
-    "vitest": "^2.0.0",
-    "zod": "^3.23.0"
+    "typescript-eslint": "^8.0.0",
+    "vitest": "^2.0.0"
   }
 }
