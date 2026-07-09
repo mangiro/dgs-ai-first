@@ -31,3 +31,14 @@ A fase de estruturação cobre a montagem do ambiente, dos padrões e dos artefa
 | 2.3 | Definição de estratégia de skills do projeto |
 
 Acesse as atividades, evidências e o código do projeto na branch [`cenario-2`](https://github.com/mangiro/dgs-ai-first/tree/cenario-2).
+
+### Cenário-Âncora 3 — Fase de Governança e Validação
+
+A fase de governança cobre a validação de saídas de IA e a revisão crítica de código gerado por modelos: guardrails determinísticos sobre respostas estruturadas (structured output) e um fluxo human-in-the-loop que confronta revisão humana e revisão por IA de código, garantindo conformidade com a *constitution* do projeto.
+
+| # | Atividade |
+|---|-----------|
+| 3.1 | Structured output e verificações determinísticas — validação de resposta do LLM com Zod e guardrails determinísticos, com fallback seguro |
+| 3.2 | Revisão crítica de código gerado por IA (human-in-the-loop) — revisão humana vs. IA e análise comparativa das abordagens |
+
+Acesse as atividades, evidências e o código do projeto na branch [`cenario-3`](https://github.com/mangiro/dgs-ai-first/tree/cenario-3).
