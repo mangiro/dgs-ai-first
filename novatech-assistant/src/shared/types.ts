@@ -35,3 +35,14 @@ export interface QueryResponse {
   answer: string;
   sources: Pick<DocumentChunk, "source_document" | "vigencia">[];
 }
+
+/**
+ * Feedback do atendente sobre uma resposta, enviado a `POST /api/feedback`.
+ * `attendantEmail` é PII (identificador direto) e nunca deve ser logado.
+ */
+export interface FeedbackRequest {
+  queryId: string;
+  rating: number;
+  comment?: string;
+  attendantEmail: string;
+}

@@ -18,6 +18,7 @@ export const logger: Logger = pino({
     paths: [
       "config.azureOpenAI.key",
       "config.azureSearch.key",
+      "config.cosmos.connectionString",
       "*.key",
       'req.headers["api-key"]',
       "req.headers.authorization",

@@ -9,6 +9,7 @@
     "build": "tsc -p ."
   },
   "dependencies": {
+    "@azure/cosmos": "^4.9.3",
     "@azure/functions": "^4.5.0",
     "@azure/openai": "^2.0.0",
     "@azure/search-documents": "^12.1.0",

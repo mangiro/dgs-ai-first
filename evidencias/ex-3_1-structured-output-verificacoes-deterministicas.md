@@ -1,3 +1,39 @@
+# Evidência exercício 3.1 — Structured output e verificações determinísticas (harness de código)
+
+## O schema Zod e o código do response-validator
+
+**Contexto adicionado a sessão:**
+- [cenario-novatech.md](../docs/cenario-novatech.md)
+- [POL-001-politica-devolucao.md](../novatech-assistant/docs/novatech/POL-001-politica-devolucao.md)
+
+**Prompt utilizado:**
+```
+Você é um Desenvolvedor TypeScript Sênior especializado em sistemas de IA orientados a RAG e validação estruturada.
+
+Sua tarefa é implementar o arquivo `response-validator.ts` utilizando a biblioteca Zod para validar e processar as respostas da IA.
+
+Siga as instruções abaixo:
+
+1. Defina e exporte um Zod schema para a saída estruturada com os seguintes campos:
+    - `answer` (string)
+	- `source_document` (string)
+	- `confidence_score` (number)
+2. Crie a função principal de validação (ex: `validateAiResponse(rawInput: unknown)`).
+
+A função de validação deve aplicar rigorosamente as seguintes regras:
+
+1. **Obrigatoriedade de Fonte:** Toda resposta DEVE incluir o campo `source_document` não vazio.
+2. **Restrição de Carga Perigosa:** Se a `answer` mencionar os termos "carga perigosa" E "devolução" (independente de maiúsculas/minúsculas), ela DEVE ser inspecionada. Se a afirmação sugerir que a devolução é possível (ausência de negativa), a resposta deve ser bloqueada.
+
+Em qualquer cenário de falha (erro de tipagem Zod, falta de `source_document`, ou violação da regra de carga perigosa):
+    - Registre o motivo exato/detalhado da falha no log.
+	- Ignore a resposta original da IA.
+	- Retorne um objeto de resposta padrão de fallback e totalmente seguro (ex: afirmando que não é possível processar a solicitação no momento).
+
+Gere o código completo e limpo de `response-validator.ts`. Inclua os tipos inferidos do Zod (`z.infer`) e adicione comentários explicando especialmente a lógica utilizada no Guardrail 2.
+```
+**Resultado:**
+```typescript
 // Validador de structured output do modelo LLM (harness — Cenário 3).
 // O modelo é forçado a responder em JSON { answer, source_document, confidence_score }.
 // Este módulo é a fronteira de confiança entre a saída do LLM e o restante do
@@ -11,44 +47,12 @@ import { childLogger } from "../shared/logger.js";
 const log = childLogger({ module: "response-validator" });
 
 /**
- * Allowlist dos documentos que existem de fato no acervo indexado (corpus de
- * retrieval — ver `data/retrieval-corpus/chunks-novatech.md`). Guardrail 1 valida
- * PRESENÇA de fonte via `.min(1)`; esta lista valida a VERACIDADE dela, barrando
- * citações fabricadas (ex.: "POL-042-devolucao-estendida") que passariam por
- * `.min(1)` mas não correspondem a nenhum documento real.
- *
- * A `source_document` pode chegar como ID de documento ("POL-001") ou de chunk
- * ("POL-001-B", "FAQ-03"), então casamos por PREFIXO. Fonte única de verdade:
- * idealmente derivada do próprio índice; aqui espelha os documentos do corpus.
- */
-const KNOWN_SOURCE_PREFIXES: readonly string[] = [
-  "POL-001", // Política de Devolução
-  "PROC-042-V2", // Frete Especial — versão revisada (checado ANTES de PROC-042)
-  "PROC-042V2",
-  "PROC-042", // Frete Especial — versão original
-  "SLA-2024", // Tabela de SLA
-  "FAQ-", // FAQ-Atendimento e itens (FAQ-03, FAQ-08, ...)
-];
-
-/**
- * Guardrail 1 (veracidade): a fonte citada precisa corresponder a um documento
- * do acervo indexado. Ignora namespace interno após "::" e casa por prefixo,
- * tolerando tanto ID de documento quanto de chunk.
- */
-function isKnownSource(doc: string): boolean {
-  const id = doc.split("::")[0].trim().toUpperCase();
-  return KNOWN_SOURCE_PREFIXES.some((prefix) => id.startsWith(prefix));
-}
-
-/**
  * Schema da saída estruturada do assistente.
  *
  * - `answer`: texto da resposta; não pode ser vazio.
  * - `source_document`: Guardrail 1 (Obrigatoriedade de Fonte) — toda resposta
  *   DEVE citar a fonte. `.min(1)` rejeita string vazia ou só com espaços após
- *   normalização (ver `.trim()` no schema), e o `.refine` exige que a fonte
- *   corresponda a um documento REAL do acervo indexado (allowlist), fechando a
- *   brecha de citação fabricada com aparência de credibilidade.
+ *   normalização (ver `.trim()` no schema).
  * - `confidence_score`: número em [0, 1]. Fora da faixa é formato inválido.
  *
  * `.strict()` rejeita campos inesperados — se o modelo "inventar" chaves extras,
@@ -60,15 +64,11 @@ export const aiResponseSchema = z
       .string({ required_error: "O campo 'answer' é obrigatório." })
       .trim()
       .min(1, "O campo 'answer' não pode ser vazio."),
-    // Guardrail 1: fonte obrigatória, não-vazia E existente no acervo indexado.
+    // Guardrail 1: fonte obrigatória e não-vazia.
     source_document: z
       .string({ required_error: "O campo 'source_document' é obrigatório." })
       .trim()
-      .min(1, "O campo 'source_document' é obrigatório e não pode ser vazio.")
-      .refine(
-        isKnownSource,
-        "Fonte citada não corresponde a um documento conhecido do acervo.",
-      ),
+      .min(1, "O campo 'source_document' é obrigatório e não pode ser vazio."),
     confidence_score: z
       .number({ required_error: "O campo 'confidence_score' é obrigatório." })
       .min(0, "O campo 'confidence_score' deve ser >= 0.")
@@ -107,86 +107,55 @@ export const SAFE_FALLBACK_RESPONSE: AiResponse = Object.freeze({
 // resposta — ela precisa provar que nega a devolução; o silêncio é tratado como
 // afirmação perigosa, não como benefício da dúvida.
 
-/**
- * Normaliza para comparação: remove acentos (NFD), baixa a caixa e colapsa
- * espaços/quebras de linha. Ponto único de normalização — triggers E negações
- * passam por aqui, eliminando a lista de variantes acentuadas escrita à mão e
- * fechando a evasão por acento/typo, espaço duplo e quebra de linha.
- */
-function normalize(text: string): string {
-  return text
-    .normalize("NFD") // separa base + diacrítico
-    .replace(/[̀-ͯ]/g, "") // remove os diacríticos (marcas combinantes)
-    .toLowerCase()
-    .replace(/\s+/g, " ") // colapsa espaço duplo / quebra de linha
-    .trim();
-}
-
-// Gatilhos tolerantes a plural e espaçamento variável (após `normalize`, já sem
-// acento). `cargas? perigosas?` casa "carga perigosa" E "cargas perigosas" — a
-// própria POL-001 (seção 3.2) escreve no plural, forma que o substring match
-// antigo não pegava. `devol\w*` usa o radical comum "devol" para cobrir TODAS as
-// flexões: "devolucao"/"devolucoes" (radical devolu) E "devolver"/"devolvida"/
-// "devolvidas" (radical devolv) — um `devolu\w*` deixaria escapar as formas em
-// "devolv", justamente as usadas nas frases de afirmação de risco.
-const CARGA_PERIGOSA_RE = /cargas?\s+perigosas?/;
-const DEVOLUCAO_RE = /devol\w*/;
+/** Termos-gatilho que, juntos, ativam a inspeção do Guardrail 2. */
+const CARGA_PERIGOSA_TERM = "carga perigosa";
+const DEVOLUCAO_TERM = "devolu"; // cobre "devolução", "devolver", "devolvida", etc.
 
 /**
- * Marcadores de negativa (sem acento — `normalize` já removeu diacríticos). A
- * presença de qualquer um NA FRASE DE RISCO indica que a resposta está negando a
- * devolução (comportamento correto conforme POL-001). A lista é propositalmente
- * ampla para reduzir falsos negativos (deixar passar uma afirmação perigosa é
- * pior do que bloquear uma resposta correta por excesso de zelo — esta última
- * cai no fluxo human-in-the-loop).
+ * Marcadores de negativa. A presença de qualquer um indica que a resposta está
+ * negando a devolução (comportamento correto conforme POL-001). A lista é
+ * propositalmente ampla para reduzir falsos negativos (deixar passar uma
+ * afirmação perigosa é pior do que bloquear uma resposta correta por excesso de
+ * zelo — esta última cai no fluxo human-in-the-loop).
  */
 const NEGATION_MARKERS: readonly string[] = [
+  "não é possível",
   "nao e possivel",
-  "nao e elegivel",
+  "não é elegível",
+  "não são elegíveis",
   "nao sao elegiveis",
-  "nao elegivel",
-  "inelegivel",
-  "nao pode ser devolvid", // "nao pode ser devolvida/o"
-  "nao podem ser devolvid",
-  "nao permite",
-  "nao e permitido",
-  "nao aceita",
-  "excecao ao prazo",
-  "gestao de riscos", // POL-001 encaminha esses casos à Gestão de Riscos
+  "não elegível",
+  "inelegível",
+  "não pode ser devolvid", // "não pode ser devolvida/o"
+  "não podem ser devolvid",
+  "não permite",
+  "não é permitido",
+  "não aceita",
+  "exceção ao prazo",
+  "gestão de riscos", // POL-001 encaminha esses casos à Gestão de Riscos
 ];
 
 /**
  * Aplica o Guardrail 2 sobre o texto da resposta já validada pelo schema.
- * A negativa é escopada à MESMA sentença que associa "carga perigosa" e
- * "devolução" — um marcador solto em outro ponto do texto não desliga mais o
- * bloqueio (mantém a filosofia fail-safe: o silêncio bloqueia).
  * @returns `true` se a resposta deve ser BLOQUEADA.
  */
 function violatesCargaPerigosaRule(answer: string): boolean {
-  const normalized = normalize(answer);
+  const normalized = answer.toLowerCase();
 
-  // A inspeção só se aplica quando os DOIS temas aparecem no texto.
-  if (!CARGA_PERIGOSA_RE.test(normalized) || !DEVOLUCAO_RE.test(normalized)) {
+  const mentionsCargaPerigosa = normalized.includes(CARGA_PERIGOSA_TERM);
+  const mentionsDevolucao = normalized.includes(DEVOLUCAO_TERM);
+
+  // A inspeção só se aplica quando AMBOS os temas aparecem juntos.
+  if (!mentionsCargaPerigosa || !mentionsDevolucao) {
     return false;
   }
 
-  // Isola as sentenças que associam "carga perigosa" E "devolução" na MESMA frase.
-  const sentences = normalized.split(/[.!?;\n]+/);
-  const riskSentences = sentences.filter(
-    (s) => CARGA_PERIGOSA_RE.test(s) && DEVOLUCAO_RE.test(s),
+  const hasNegation = NEGATION_MARKERS.some((marker) =>
+    normalized.includes(marker),
   );
 
-  // Se os temas nunca coincidem numa mesma frase, mantém o bloqueio conservador
-  // (fail-safe): coocorrência distante ainda merece revisão humana.
-  if (riskSentences.length === 0) return true;
-
-  // A negativa precisa estar NA frase de risco — não solta em outro ponto do texto.
-  const everyRiskSentenceNegated = riskSentences.every((s) =>
-    NEGATION_MARKERS.some((marker) => s.includes(marker)),
-  );
-
-  // Bloqueia se QUALQUER frase de risco não contiver negativa explícita.
-  return !everyRiskSentenceNegated;
+  // Bloqueia quando NÃO há negativa (a resposta sugere devolução possível).
+  return !hasNegation;
 }
 
 /**
@@ -243,3 +212,35 @@ export function validateAiResponse(rawInput: unknown): AiResponse {
 
   return response;
 }
+```
+
+## O code review do código do response-validator
+
+**Contexto adicionado a sessão:**
+- [cenario-novatech.md](../docs/cenario-novatech.md)
+- [POL-001-politica-devolucao.md](../novatech-assistant/docs/novatech/POL-001-politica-devolucao.md)
+- [response-validator.ts](#o-schema-zod-e-o-código-do-response-validator)
+
+**Prompt utilizado:**
+```
+Atue como um Engenheiro de Software Sênior especialista em revisão de código e segurança. Sua tarefa é fazer um code review rigoroso no código do `response-validator.ts`.
+
+Analise as lógicas de validação e identifique pelo menos **2 problemas estruturais ou falhas de borda**. Preste atenção especial aos seguintes pontos de falha comuns:
+
+- O schema de validação está permitindo a injeção de campos extras não mapeados?
+- A expressão regular que identifica "carga perigosa + devolução" é suficientemente robusta para cobrir caixa alta/baixa, erros de digitação comuns, acentuação e diferentes espaçamentos?
+
+Para cada problema identificado, estruture sua resposta da seguinte forma:
+
+1. **Problema Identificado:** Descrição clara da falha.
+2. **Cenário de Risco:** Demonstre com um exemplo prático como isso pode causar comportamento indesejado.
+3. **Correção Proposta:** Forneça o trecho de código refatorado que soluciona a falha, com comentários pontuais da mudança.
+```
+
+**Resultado:**
+- [ex-3_1-code-review-response-validator.md](../docs/ex-3_1-code-review-response-validator.md)
+
+## O código do response-validator com as correções do code review
+
+**Resultado:**
+- [response-validator.ts](../novatech-assistant/src/services/response-validator.ts)

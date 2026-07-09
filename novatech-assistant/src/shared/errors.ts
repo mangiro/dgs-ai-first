@@ -34,6 +34,11 @@ export class ContextBudgetError extends AppError {
   readonly statusCode = 500;
 }
 
+/** Falha ao persistir um documento no Cosmos DB. */
+export class PersistenceError extends AppError {
+  readonly statusCode = 502;
+}
+
 /** Type guard para identificar erros de domínio conhecidos. */
 export function isAppError(error: unknown): error is AppError {
   return error instanceof AppError;

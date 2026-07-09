@@ -18,6 +18,9 @@ const REQUIRED_ENV_VARS = [
   "AZURE_SEARCH_ENDPOINT",
   "AZURE_SEARCH_KEY",
   "AZURE_SEARCH_INDEX",
+  "COSMOS_CONNECTION_STRING",
+  "COSMOS_DATABASE",
+  "COSMOS_CONTAINER",
 ] as const;
 
 type RequiredEnvVar = (typeof REQUIRED_ENV_VARS)[number];
@@ -57,6 +60,11 @@ export interface Config {
     key: string;
     index: string;
   };
+  cosmos: {
+    connectionString: string;
+    database: string;
+    container: string;
+  };
   budget: {
     systemPromptTokens: number;
     chunksTokens: number;
@@ -76,6 +84,11 @@ function buildConfig(env: Record<RequiredEnvVar, string>): Config {
       endpoint: env.AZURE_SEARCH_ENDPOINT,
       key: env.AZURE_SEARCH_KEY,
       index: env.AZURE_SEARCH_INDEX,
+    },
+    cosmos: {
+      connectionString: env.COSMOS_CONNECTION_STRING,
+      database: env.COSMOS_DATABASE,
+      container: env.COSMOS_CONTAINER,
     },
     budget: {
       systemPromptTokens: SYSTEM_PROMPT_TOKEN_BUDGET,
